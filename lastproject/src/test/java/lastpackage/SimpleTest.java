@@ -32,7 +32,9 @@ public class SimpleTest {
     	System.setProperty("webdriver.chrome.driver","C:\\browserdriver\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.get("https://www.gittigidiyor.com");
+        //String url = "https://www.gittigidiyor.com";
         logger.info("Test" + driver.getTitle());
+        Assert.assertEquals( "https://www.gittigidiyor.com/", driver.getCurrentUrl());
         driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
         
     }
@@ -44,9 +46,12 @@ public class SimpleTest {
         driver.findElement(By.id("L-PasswordField")).sendKeys("deneme12");
         driver.findElement(By.id("gg-login-enter")).click();
         driver.findElement(By.linkText("anasayfaya")).click();
-        logger.info("Yönlendirilen Sayfa : " + driver.getTitle());
-        String actResult = "Kullanýcý Tanýmlama";
-        Assert.assertEquals(actResult, driver.getTitle());
+        
+        
+        //String actResult = "denemedenemeee";
+        
+        //sonuc is not defined
+        //Assert.assertEquals(actResult, sonuc,"Login Baþarýsýz!");
         driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
     }
 
@@ -60,6 +65,7 @@ public class SimpleTest {
     	WebElement element = driver.findElement(By.xpath("//*[@id='best-match-right']/div[5]/ul/li[2]/a"));
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click();", element);
+        Assert.assertEquals("https://www.gittigidiyor.com/arama/?k=bilgisayar&sf=2", driver.getCurrentUrl(),"2. sayfa açýlamadý!");
     	
     	//driver.findElement(By.xpath("//*[@id=\"best-match-right\"]/div[5]/ul/li[2]"));
     	//driver.get("https://www.gittigidiyor.com/arama/?k=bilgisayar&v=normal&sf=2");
@@ -98,14 +104,21 @@ public class SimpleTest {
         //driver.findElement(By.id("add-to-basket")).click();
     	//driver.findElement(By.xpath("//button[@id='add-to-basket']")).click();
     	//driver.findElement(By.linkText("Sepete Ekle")).click();
+        //***********************************************************
+      //  String price = driver.findElement(By.id("sp-price-discountPrice")).toString();
+       // String newprice = driver.findElement(By.id("product-new-price")).toString();
+        
+       // Assert.assertEquals(price, newprice, "Eþit deðil!!!");
+        //****************************************************************
         driver.findElement(By.linkText("Sepete Git")).click();
         
         if (driver instanceof JavascriptExecutor) {
             js = (JavascriptExecutor) driver;
         }
-        js.executeScript("return document.getElementsByClassName('btn-delete btn-update-item')[0].click();");
+        String string = ((WebElement) js.executeScript("return document.getElementsByClassName('btn-delete btn-update-item')[0].click();")).getText();
+        Assert.assertEquals("Boþ deðil", "Sepetinizde ürün bulunmamaktadýr.", string);
+    
     }
-
 
     
     @AfterTest
